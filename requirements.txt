@@ -3,4 +3,5 @@ python-dotenv
 Flask-SQLAlchemy
 groq
 psycopg2-binary
-gunicorn 
+gunicorn
+flask-cors

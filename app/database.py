@@ -42,7 +42,7 @@ def tum_leadler():
             """
             SELECT *
             FROM leads
-            ORDER BY id ASC    # ASC KÜÇÜKTEN BÜYÜĞE SIRALA DEMEK
+            ORDER BY id ASC   
             """
         ).fetchall()
 

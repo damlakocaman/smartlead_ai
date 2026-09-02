@@ -1,13 +1,14 @@
 import requests
 
 from config import Config
-
+from groq import Groq
 
 class AIService:
 
     def __init__(self):
         self.api_key = Config.GROQ_API_KEY
-        self.model = "llama-3.1-8b-instant"
+        self.fallback_model = "openai/gpt-oss-20b"
+       
 
     def get_business_context(self):
         return Config.BUSINESS_CONTEXT

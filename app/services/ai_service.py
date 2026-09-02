@@ -1,4 +1,3 @@
-import os
 from config import Config
 from groq import Groq  # Resmi Groq kütüphanesini kullanıyoruz
 

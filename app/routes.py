@@ -93,7 +93,7 @@ def create_lead():
 
 @api.route("/leads", methods=["GET"])
 def get_leads():
-
     leads = tum_leadler()
+    # Wix tarafındaki veri.leadler kontrolü ile eşleşmesi için sözlük yapısına çevirdik
+    return jsonify({"leadler": leads}), 200  
 
-    return jsonify(leads), 200

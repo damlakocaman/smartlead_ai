@@ -1,26 +1,30 @@
-import requests
-
+import os
 from config import Config
-from groq import Groq
+from groq import Groq  # Resmi Groq kütüphanesini kullanıyoruz
 
 class AIService:
 
     def __init__(self):
         self.api_key = Config.GROQ_API_KEY
-        self.fallback_model = "openai/gpt-oss-20b"
-       
+        # 1. Eksik olan model tanımını ekledik (En güncel Llama 3.3 modeli)
+        self.model = "llama-3.3-70b-versatile" 
+        
+        # 2. Groq istemcisini (client) resmi kütüphane ile başlatıyoruz
+        self.client = None
+        if self.api_key:
+            self.client = Groq(api_key=self.api_key)
 
     def get_business_context(self):
         return Config.BUSINESS_CONTEXT
 
     def yanit_uret(self, mesaj, gecmis=None):
-
         if gecmis is None:
             gecmis = []
 
-        if not self.api_key:
-            return "Demo modu: Groq API anahtarı bulunamadı."
+        if not self.client:
+            return "Demo modu: Groq API anahtarı bulunamadı veya istemci başlatılamadı."
 
+        # Sistem mesajını (Business Context) ekle
         messages = [
             {
                 "role": "system",
@@ -28,8 +32,10 @@ class AIService:
             }
         ]
 
+        # Varsa geçmiş chat mesajlarını ekle
         messages.extend(gecmis)
  
+        # Kullanıcının son mesajını ekle
         messages.append(
             {
                 "role": "user",
@@ -38,30 +44,22 @@ class AIService:
         )
 
         try:
-
-            response = requests.post(
-                "https://api.groq.com/openai/v1/chat/completions",
-                headers={
-                    "Authorization": f"Bearer {self.api_key}",
-                    "Content-Type": "application/json"
-                },
-                json={
-                    "model": self.model,
-                    "messages": messages
-                },
-                timeout=30
+            # requests yerine resmi Groq SDK çağrısını yapıyoruz
+            completion = self.client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                temperature=0.7,
+                max_tokens=1024,
+                timeout=30.0  # Zaman aşımı süresi
             )
 
-            response.raise_for_status()
+            # Yapay zekanın ürettiği cevabı geri döndür
+            return completion.choices[0].message.content
 
-            data = response.json()
-
-            return data["choices"][0]["message"]["content"]
-
-        except requests.RequestException as e:
-
+        except Exception as e:
+            # Olası bir API hatasında uygulamanın 503/500 çökmesini engellemek için hata fırlatıyoruz
             raise AIServiceError(
-                f"Yapay zeka servisine bağlanılamadı: {e}"
+                f"Groq servisine bağlanılamadı veya hata oluştu: {e}"
             )
 
 
@@ -69,4 +67,5 @@ class AIServiceError(Exception):
     pass
 
 
+# Dışarıdan doğrudan çağrılabilmesi için nesneyi oluşturuyoruz
 ai_service = AIService()

@@ -13,7 +13,7 @@ pages = Blueprint("pages", __name__)
 # AI servisi
 ai_service = AIService()
 
-
+CORS(api)
 # -------------------------
 # SAYFA ENDPOINTLERİ
 # -------------------------

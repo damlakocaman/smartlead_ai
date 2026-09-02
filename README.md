@@ -10,7 +10,7 @@ INTEROCEANIC GLOBE markasına ait bir websitesi. Yapay zeka desteği ile uçtan 
 - İsim ve telefon bilgilerini görüntüleme
 - Yapay zekâ destekli sohbet
 - Groq API entegrasyonu
-- PostgreSQL veritabanı kullanımı
+- SQLite veritabanı kullanımı
 - Flask REST API
 - Wix arayüzü ile backend bağlantısı
 

@@ -5,8 +5,7 @@ class AIService:
 
     def __init__(self):
         self.api_key = Config.GROQ_API_KEY
-        # 1. Eksik olan model tanımını ekledik (En güncel Llama 3.3 modeli)
-        self.model = "llama-3.3-70b-versatile" 
+        self.model = "openai/gpt-oss-20b" 
         
         # 2. Groq istemcisini (client) resmi kütüphane ile başlatıyoruz
         self.client = None

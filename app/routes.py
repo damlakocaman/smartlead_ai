@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, render_template, request
 
 from app.database import lead_ekle, tum_leadler
 from app.services.ai_service import AIService, AIServiceError
-
+from groq import Groq 
 
 # API için Blueprint
 api = Blueprint("api", __name__, url_prefix="/api")
